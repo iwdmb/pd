@@ -96,7 +96,7 @@ func (s *serverTestSuite) CheckRespCode(c *C, cluster *tests.TestCluster, hasSer
 		} else {
 			if hasServiceNode {
 				checkRespCode(fmt.Sprintf("%s/dashboard/", addr), http.StatusTemporaryRedirect)
-				checkRespCode(fmt.Sprintf("%s/dashboard/api/keyvisual/heatmaps", addr), http.StatusTemporaryRedirect)
+				checkRespCode(fmt.Sprintf("%s/dashboard/api/keyvisual/heatmaps", addr), http.StatusUnauthorized)
 			} else {
 				checkRespCode(fmt.Sprintf("%s/dashboard/", addr), http.StatusNotFound)
 				checkRespCode(fmt.Sprintf("%s/dashboard/api/keyvisual/heatmaps", addr), http.StatusNotFound)

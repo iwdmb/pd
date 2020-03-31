@@ -141,12 +141,12 @@ func (m *Manager) checkAddress() {
 		}
 	}
 
-	m.redirector.SetAddress(dashboardAddress)
-
 	clientUrls := m.srv.GetMemberInfo().GetClientUrls()
 	if len(clientUrls) > 0 && clientUrls[0] == dashboardAddress {
+		m.redirector.SetAddress("")
 		m.startService()
 	} else {
+		m.redirector.SetAddress(dashboardAddress)
 		m.stopService()
 	}
 }

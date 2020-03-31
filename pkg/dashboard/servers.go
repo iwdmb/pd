@@ -48,7 +48,7 @@ func GetServiceBuilders() []server.HandlerBuilder {
 		// Dashboard API Service
 		func(ctx context.Context, srv *server.Server) (http.Handler, server.ServiceGroup, error) {
 			var err error
-			if s, err = newAPIService(srv, redirector); err != nil {
+			if s, err = newAPIService(srv, http.HandlerFunc(redirector.ReverseProxy)); err != nil {
 				return nil, apiServiceGroup, err
 			}
 
@@ -60,7 +60,10 @@ func GetServiceBuilders() []server.HandlerBuilder {
 		},
 		// Dashboard UI
 		func(context.Context, *server.Server) (http.Handler, server.ServiceGroup, error) {
-			handler := s.NewStatusAwareHandler(http.StripPrefix(uiServiceGroup.PathPrefix, uiserver.Handler()), redirector)
+			handler := s.NewStatusAwareHandler(
+				http.StripPrefix(uiServiceGroup.PathPrefix, uiserver.Handler()),
+				http.HandlerFunc(redirector.TemporaryRedirect),
+			)
 			return handler, uiServiceGroup, nil
 		},
 	}
